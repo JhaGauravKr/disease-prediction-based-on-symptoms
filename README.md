@@ -39,6 +39,15 @@ This project is a machine learning-based application designed to predict disease
 | K-Nearest Neighbour  | 92%      |
 | Naive Bayes          | 93%      |
 
+
+**Setup Instructions**
+
+Ensure you have one of the **Jupyter Notebook or VS Code**.
+
+Download the code file, testing and training dataset.
+
+Upload them on any development environment and run it.
+
 **Future Improvements**
 
 1. Adding more symptoms and diseases to enhance the prediction model.

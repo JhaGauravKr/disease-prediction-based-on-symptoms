@@ -11,14 +11,16 @@ This project is a machine learning-based application designed to predict disease
 
 **Tech Stack**
 
-**Programming Language:** Python
-**GUI:** Tkinter
+**Programming Language:** Python<br>
+**GUI:** Tkinter<br>
 **Machine Learning Algorithms:**<br>
-    - Decision Tree<br>
-    - Random Forest<br>
-    - K-Nearest Neighbour<br>
-    - Naive Bayes<br>
-**Database:** SQLite
+<ul>
+  <li>Decision Tree</li>
+  <li>Random Forest</li>
+  <li>K-Nearest Neighbour</li>
+  <li>Naive Bayes</li>
+</ul>
+**Database:** SQLite<br>
 **Development Environment:** Jupyter Notebook<br>
 
 **How It Works**

@@ -4,10 +4,10 @@ This project is a machine learning-based application designed to predict disease
 
 **Features**
 
-**Multiple ML algorithms:** Uses Decision Tree, Random Forest, K-Nearest Neighbour, and Naive Bayes to provide diverse predictions.
-**User-friendly GUI:** Built with Tkinter, the interface allows users to select symptoms and view predictions easily.
-**Final prediction:** After viewing results from all algorithms, users can click the "Final Prediction" button to get a consolidated prediction.
-**Database storage:** All user data, including patient names and symptoms, is stored in an SQLite database.
+**Multiple ML algorithms:** Uses Decision Tree, Random Forest, K-Nearest Neighbour, and Naive Bayes to provide diverse predictions.<br>
+**User-friendly GUI:** Built with Tkinter, the interface allows users to select symptoms and view predictions easily.<br>
+**Final prediction:** After viewing results from all algorithms, users can click the "Final Prediction" button to get a consolidated prediction.<br>
+**Database storage:** All user data, including patient names and symptoms, is stored in an SQLite database.<br>
 **Tech Stack**
 
 **Programming Language:** Python
@@ -21,10 +21,10 @@ This project is a machine learning-based application designed to predict disease
 **Development Environment:** Jupyter Notebook
 **How It Works**
 
-**Input:** The user provides their name and selects five symptoms from a predefined list.
-**Prediction:** Upon clicking the "Predict All" button, the application uses four machine learning models to predict potential diseases based on the symptoms.
-**Final Outcome:** The user can then click the "Final Prediction" button to see a consolidated prediction based on the results of the four algorithms.
-**Database Storage:** The patient's details and predictions are saved in an SQLite database, which can be accessed through the SQLite browser for further analysis.
+**Input:** The user provides their name and selects five symptoms from a predefined list.<br>
+**Prediction:** Upon clicking the "Predict All" button, the application uses four machine learning models to predict potential diseases based on the symptoms.<br>
+**Final Outcome:** The user can then click the "Final Prediction" button to see a consolidated prediction based on the results of the four algorithms.<br>
+**Database Storage:** The patient's details and predictions are saved in an SQLite database, which can be accessed through the SQLite browser for further analysis.<br>
 
 
 | Algorithm            | Accuracy |

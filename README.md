@@ -20,6 +20,7 @@ This project is a machine learning-based application designed to predict disease
   <li>K-Nearest Neighbour</li>
   <li>Naive Bayes</li>
 </ul>
+
 **Database:** SQLite<br>
 **Development Environment:** Jupyter Notebook<br>
 

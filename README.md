@@ -12,13 +12,13 @@ This project is a machine learning-based application designed to predict disease
 
 **Programming Language:** Python
 **GUI:** Tkinter
-**Machine Learning Algorithms:**
-    - Decision Tree
-    - Random Forest
-    - K-Nearest Neighbour
-    - Naive Bayes
+**Machine Learning Algorithms:**<br>
+    - Decision Tree<br>
+    - Random Forest<br>
+    - K-Nearest Neighbour<br>
+    - Naive Bayes<br>
 **Database:** SQLite
-**Development Environment:** Jupyter Notebook
+**Development Environment:** Jupyter Notebook<br>
 **How It Works**
 
 **Input:** The user provides their name and selects five symptoms from a predefined list.<br>

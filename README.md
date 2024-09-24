@@ -8,6 +8,7 @@ This project is a machine learning-based application designed to predict disease
 **User-friendly GUI:** Built with Tkinter, the interface allows users to select symptoms and view predictions easily.<br>
 **Final prediction:** After viewing results from all algorithms, users can click the "Final Prediction" button to get a consolidated prediction.<br>
 **Database storage:** All user data, including patient names and symptoms, is stored in an SQLite database.<br>
+
 **Tech Stack**
 
 **Programming Language:** Python
@@ -19,6 +20,7 @@ This project is a machine learning-based application designed to predict disease
     - Naive Bayes<br>
 **Database:** SQLite
 **Development Environment:** Jupyter Notebook<br>
+
 **How It Works**
 
 **Input:** The user provides their name and selects five symptoms from a predefined list.<br>

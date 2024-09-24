@@ -1,4 +1,4 @@
-##Overview
+#Overview
 This project is a machine learning-based application designed to predict diseases based on a user's selected symptoms. The prediction is made using four different algorithms: **Decision Tree, Random Forest, K-Nearest Neighbour, and Naive Bayes**. The user interacts with the application through a simple Tkinter GUI, and the prediction results are stored in an **SQLite database**.
 
 ###Features

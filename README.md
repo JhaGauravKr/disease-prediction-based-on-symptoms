@@ -9,7 +9,7 @@ This project is a machine learning-based application designed to predict disease
 **Final prediction:** After viewing results from all algorithms, users can click the "Final Prediction" button to get a consolidated prediction.<br>
 **Database storage:** All user data, including patient names and symptoms, is stored in an SQLite database.<br>
 
-**Tech Stack**
+## **Tech Stack**
 
 **Programming Language:** Python<br>
 **GUI:** Tkinter<br>
@@ -24,7 +24,7 @@ This project is a machine learning-based application designed to predict disease
 **Database:** SQLite<br>
 **Development Environment:** Jupyter Notebook<br>
 
-**How It Works**
+## **How It Works**
 
 **Input:** The user provides their name and selects five symptoms from a predefined list.<br>
 **Prediction:** Upon clicking the "Predict All" button, the application uses four machine learning models to predict potential diseases based on the symptoms.<br>
@@ -40,7 +40,7 @@ This project is a machine learning-based application designed to predict disease
 | Naive Bayes          | 93%      |
 
 
-**Setup Instructions**
+## **Setup Instructions**
 
 Ensure you have one of the **Jupyter Notebook or VS Code**.
 
@@ -48,17 +48,17 @@ Download the code file, testing and training dataset.
 
 Upload them on any development environment and run it.
 
-**Future Improvements**
+## **Future Improvements**
 
 1. Adding more symptoms and diseases to enhance the prediction model.
 2. Incorporating more sophisticated ML models like SVM or Neural Networks for better accuracy.
 3. Implementing a web-based interface using Django/Flask for broader accessibility.
 
-**Conclusion**
+## **Conclusion**
 
 This project demonstrates the integration of machine learning with a user-friendly interface for disease prediction. The use of multiple algorithms offers varied insights, making the final outcome more reliable.
 
-**License**
+### **License**
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 

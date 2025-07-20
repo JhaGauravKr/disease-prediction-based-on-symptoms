@@ -175,7 +175,7 @@ def scatterplt(disea_name):
     fig, ax = plt.subplots(figsize=(10, 6))
     if disea_name and disea_name != "Not Found":
         # Find the original dataframe before replacement
-        df_original = pd.read_csv("training (1).csv")
+        df_original = pd.read_csv("training.csv")
         # Apply the same cleaning to df_original columns for consistency
         df_original.columns = df_original.columns.str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
         # And clean prognosis values for df_original

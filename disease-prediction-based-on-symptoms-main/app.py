@@ -23,7 +23,7 @@ def load_data():
         df = pd.read_csv("training.csv")
         tr = pd.read_csv("testing.csv")
     except FileNotFoundError:
-        st.error("Error: 'training (1).csv' or 'testing (1).csv' not found. Please ensure they are in the same directory as app.py.")
+        st.error("Error: 'training.csv' or 'testing.csv' not found. Please ensure they are in the same directory as app.py.")
         st.stop()
 
     # --- Column Name Cleaning for DataFrames ---

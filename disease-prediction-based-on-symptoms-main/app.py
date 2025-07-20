@@ -10,109 +10,16 @@ from sklearn.metrics import classification_report, confusion_matrix, accuracy_sc
 import sqlite3
 import os
 
-# --- Streamlit Page Configuration ---
-st.set_page_config(
-    page_title="Smart Disease Predictor",
-    page_icon="💊",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
+# Import UI configuration
+from ui_config import set_page_config_and_styles
 
-# --- Custom CSS for a modern look ---
-st.markdown("""
-    <style>
-    .main-header {
-        font-size: 3.5em;
-        color: #FF4B4B;
-        text-align: center;
-        font-family: 'Times New Roman', serif;
-        font-style: italic;
-        font-weight: bold;
-        margin-bottom: 0.5em;
-    }
-    .subheader {
-        font-size: 1.8em;
-        color: #1E90FF;
-        text-align: center;
-        font-family: 'Times New Roman', serif;
-        font-style: italic;
-        font-weight: bold;
-        margin-bottom: 1.5em;
-    }
-    .sidebar .sidebar-content {
-        background-color: #f0f2f6; /* Light gray background for sidebar */
-    }
-    .stSelectbox, .stTextInput, .stButton > button {
-        border-radius: 8px;
-        border: 1px solid #FF4B4B; /* Red accent for inputs */
-    }
-    .stButton > button {
-        background-color: #FF4B4B;
-        color: white;
-        font-weight: bold;
-        padding: 0.7em 1.5em;
-        transition: background-color 0.3s;
-    }
-    .stButton > button:hover {
-        background-color: #FF0000;
-        border-color: #FF0000;
-    }
-    .stAlert {
-        border-radius: 8px;
-    }
-    .stPlotlyChart {
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        padding: 1em;
-        background-color: white;
-    }
-    .result-box {
-        border: 2px solid #ddd;
-        border-radius: 8px;
-        padding: 15px;
-        margin-bottom: 10px;
-        background-color: #f9f9f9;
-        font-size: 1.1em;
-    }
-    .result-box.success {
-        border-color: #28a745;
-        background-color: #e6ffed;
-    }
-    .result-box.info {
-        border-color: #007bff;
-        background-color: #e0f2ff;
-    }
-    .result-box.warning {
-        border-color: #ffc107;
-        background-color: #fff8e0;
-    }
-    /* Specific styles for prediction result backgrounds and text colors */
-    .prediction-label {
-        font-family: "Times", serif;
-        font-weight: bold;
-        font-style: italic;
-        font-size: 15px; /* Matches the original label size */
-        padding: 8px; /* Some padding for better look */
-        border-radius: 5px; /* Slightly rounded corners */
-        text-align: center; /* Center the text */
-        width: 100%; /* Take full width of its container column */
-        box-sizing: border-box; /* Include padding in width */
-    }
-    .bg-dt { background-color: #6C5B7B; color: white; } /* Darker purple, white text */
-    .bg-rf { background-color: #C06C84; color: white; } /* Muted pink, white text */
-    .bg-nb { background-color: #F67280; color: white; } /* Coral, white text */
-    .bg-knn { background-color: #FFB3A7; color: black; } /* Lighter peach, black text */
-    .bg-final { background-color: #4CAF50; color: white; } /* Green, white text */
-    .bg-final-warning { background-color: #FFC107; color: black; } /* Orange, black text */
-
-    </style>
-    """, unsafe_allow_html=True)
+# Set page config and apply styles
+set_page_config_and_styles()
 
 # --- Data Loading and Preprocessing (Cached) ---
 @st.cache_data
 def load_data():
     try:
-        # Load the CSV files with their corrected names
         df = pd.read_csv("training.csv")
         tr = pd.read_csv("testing.csv")
     except FileNotFoundError:
@@ -173,9 +80,11 @@ def load_data():
     ]
     
     # Standardized disease list used for internal mapping (strip, replace spaces with underscores, lower)
+    # This ensures consistency with cleaned 'prognosis' column values from CSVs.
     standardized_disease_names = [d.strip().replace('  ', ' ').replace(' ', '_').lower() for d in original_disease_names]
 
     # Clean 'prognosis' column values in DataFrames for consistency with mapping keys
+    # Convert to string, strip whitespace, replace spaces with underscores, and convert to lowercase
     df['prognosis'] = df['prognosis'].astype(str).str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
     tr['prognosis'] = tr['prognosis'].astype(str).str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
 
@@ -194,8 +103,9 @@ def load_data():
         st.write(non_numeric_df['prognosis'].unique())
         st.write("Unmapped unique values in testing data:")
         st.write(non_numeric_tr['prognosis'].unique())
-        st.stop()
+        st.stop() # Stop Streamlit execution if unmapped values are found
 
+    # Use the cleaned column names for X and X_test
     X = df[l1]
     y = df["prognosis"].astype(np.int64).values
     X_test = tr[l1]
@@ -203,6 +113,8 @@ def load_data():
 
     # Return the original disease names for display purposes in the UI
     return l1, original_disease_names, X, y, X_test, y_test
+
+l1, disease, X, y, X_test, y_test = load_data()
 
 # --- Model Training (Cached) ---
 @st.cache_resource
@@ -475,7 +387,7 @@ if st.session_state.pred_dt is not None: # Check if predictions have been attemp
         st.subheader("Final Outcome")
         # Determine the appropriate CSS class for the final outcome box based on its content
         final_outcome_css_class = "bg-final"
-        if st.session_state.final_outcome in ["Not Found", "No clear majority. Please provide more symptoms if possible.", "Refill the symptoms or check for errors.", "Please fill in patient name.", "Please fill in at least the first two symptoms."]:
+        if st.session_state.final_outcome in ["No clear majority. Please provide more symptoms if possible.", "Refill the symptoms or check for errors.", "Please fill in patient name.", "Please fill in at least the first two symptoms.", "Not Found"]:
             final_outcome_css_class = "bg-final-warning"
         elif st.session_state.final_outcome.startswith("Prediction error"):
             final_outcome_css_class = "bg-final-warning" # Or a dedicated error color if preferred

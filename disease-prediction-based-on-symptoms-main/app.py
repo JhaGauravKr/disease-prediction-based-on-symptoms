@@ -8,17 +8,34 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import sqlite3
-import os
+import os # <-- Ensure os is imported
 
-# Import UI configuration
+# --- Streamlit Page Configuration (from ui_config.py, not shown here for brevity) ---
+# Assuming ui_config.py exists and is imported correctly
 from ui_config import set_page_config_and_styles
-
-# Set page config and apply styles
 set_page_config_and_styles()
 
 # --- Data Loading and Preprocessing (Cached) ---
 @st.cache_data
 def load_data():
+    # --- DEBUGGING START ---
+    st.info("Attempting to load data. Checking file paths...")
+    current_dir = os.getcwd()
+    st.write(f"Current working directory: {current_dir}")
+    
+    files_in_dir = os.listdir(current_dir)
+    st.write("Files in current directory:")
+    st.write(files_in_dir)
+
+    if "training.csv" not in files_in_dir:
+        st.error("training.csv not found in the current directory!")
+        st.stop()
+    if "testing.csv" not in files_in_dir:
+        st.error("testing.csv not found in the current directory!")
+        st.stop()
+    st.success("CSV files seem to be present!")
+    # --- DEBUGGING END ---
+
     try:
         df = pd.read_csv("training.csv")
         tr = pd.read_csv("testing.csv")
@@ -27,12 +44,10 @@ def load_data():
         st.stop()
 
     # --- Column Name Cleaning for DataFrames ---
-    # Strip whitespace, replace spaces with underscores, convert to lowercase, and fix double underscores
     df.columns = df.columns.str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
     tr.columns = tr.columns.str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
 
     # List of symptoms - now in a consistent format (all lowercase, underscores)
-    # This list is based on the cleaned column names observed from the CSVs.
     l1 = [
         'itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills', 'joint_pain',
         'stomach_pain', 'acidity', 'ulcers_on_tongue', 'muscle_wasting', 'vomiting', 'burning_micturition',
@@ -80,11 +95,9 @@ def load_data():
     ]
     
     # Standardized disease list used for internal mapping (strip, replace spaces with underscores, lower)
-    # This ensures consistency with cleaned 'prognosis' column values from CSVs.
     standardized_disease_names = [d.strip().replace('  ', ' ').replace(' ', '_').lower() for d in original_disease_names]
 
     # Clean 'prognosis' column values in DataFrames for consistency with mapping keys
-    # Convert to string, strip whitespace, replace spaces with underscores, and convert to lowercase
     df['prognosis'] = df['prognosis'].astype(str).str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
     tr['prognosis'] = tr['prognosis'].astype(str).str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
 
@@ -103,9 +116,8 @@ def load_data():
         st.write(non_numeric_df['prognosis'].unique())
         st.write("Unmapped unique values in testing data:")
         st.write(non_numeric_tr['prognosis'].unique())
-        st.stop() # Stop Streamlit execution if unmapped values are found
+        st.stop()
 
-    # Use the cleaned column names for X and X_test
     X = df[l1]
     y = df["prognosis"].astype(np.int64).values
     X_test = tr[l1]
@@ -114,6 +126,8 @@ def load_data():
     # Return the original disease names for display purposes in the UI
     return l1, original_disease_names, X, y, X_test, y_test
 
+# --- Remaining app.py code (model training, functions, UI rendering) ---
+# ... (This part is unchanged from the previous complete app.py) ...
 l1, disease, X, y, X_test, y_test = load_data()
 
 # --- Model Training (Cached) ---
@@ -387,7 +401,7 @@ if st.session_state.pred_dt is not None: # Check if predictions have been attemp
         st.subheader("Final Outcome")
         # Determine the appropriate CSS class for the final outcome box based on its content
         final_outcome_css_class = "bg-final"
-        if st.session_state.final_outcome in ["No clear majority. Please provide more symptoms if possible.", "Refill the symptoms or check for errors.", "Please fill in patient name.", "Please fill in at least the first two symptoms.", "Not Found"]:
+        if st.session_state.final_outcome in ["Not Found", "No clear majority. Please provide more symptoms if possible.", "Refill the symptoms or check for errors.", "Please fill in patient name.", "Please fill in at least the first two symptoms."]:
             final_outcome_css_class = "bg-final-warning"
         elif st.session_state.final_outcome.startswith("Prediction error"):
             final_outcome_css_class = "bg-final-warning" # Or a dedicated error color if preferred

@@ -8,35 +8,111 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 import sqlite3
-import os # <-- Ensure os is imported
+import os
 
-# --- Streamlit Page Configuration (from ui_config.py, not shown here for brevity) ---
-# Assuming ui_config.py exists and is imported correctly
-from ui_config import set_page_config_and_styles
-set_page_config_and_styles()
+# --- Streamlit Page Configuration ---
+st.set_page_config(
+    page_title="Smart Disease Predictor",
+    page_icon="💊",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# --- Custom CSS for a modern look ---
+st.markdown("""
+    <style>
+    .main-header {
+        font-size: 3.5em;
+        color: #FF4B4B;
+        text-align: center;
+        font-family: 'Times New Roman', serif;
+        font-style: italic;
+        font-weight: bold;
+        margin-bottom: 0.5em;
+    }
+    .subheader {
+        font-size: 1.8em;
+        color: #1E90FF;
+        text-align: center;
+        font-family: 'Times New Roman', serif;
+        font-style: italic;
+        font-weight: bold;
+        margin-bottom: 1.5em;
+    }
+    .sidebar .sidebar-content {
+        background-color: #f0f2f6; /* Light gray background for sidebar */
+    }
+    .stSelectbox, .stTextInput, .stButton > button {
+        border-radius: 8px;
+        border: 1px solid #FF4B4B; /* Red accent for inputs */
+    }
+    .stButton > button {
+        background-color: #FF4B4B;
+        color: white;
+        font-weight: bold;
+        padding: 0.7em 1.5em;
+        transition: background-color 0.3s;
+    }
+    .stButton > button:hover {
+        background-color: #FF0000;
+        border-color: #FF0000;
+    }
+    .stAlert {
+        border-radius: 8px;
+    }
+    .stPlotlyChart {
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        padding: 1em;
+        background-color: white;
+    }
+    .result-box {
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+        font-size: 1.1em;
+    }
+    .result-box.success {
+        border-color: #28a745;
+        background-color: #e6ffed;
+    }
+    .result-box.info {
+        border-color: #007bff;
+        background-color: #e0f2ff;
+    }
+    .result-box.warning {
+        border-color: #ffc107;
+        background-color: #fff8e0;
+    }
+    /* Specific styles for prediction result backgrounds and text colors */
+    .prediction-label {
+        font-family: "Times", serif;
+        font-weight: bold;
+        font-style: italic;
+        font-size: 15px; /* Matches the original label size */
+        padding: 8px; /* Some padding for better look */
+        border-radius: 5px; /* Slightly rounded corners */
+        text-align: center; /* Center the text */
+        width: 100%; /* Take full width of its container column */
+        box-sizing: border-box; /* Include padding in width */
+    }
+    .bg-dt { background-color: #6C5B7B; color: white; } /* Darker purple, white text */
+    .bg-rf { background-color: #C06C84; color: white; } /* Muted pink, white text */
+    .bg-nb { background-color: #F67280; color: white; } /* Coral, white text */
+    .bg-knn { background-color: #FFB3A7; color: black; } /* Lighter peach, black text */
+    .bg-final { background-color: #4CAF50; color: white; } /* Green, white text */
+    .bg-final-warning { background-color: #FFC107; color: black; } /* Orange, black text */
+
+    </style>
+    """, unsafe_allow_html=True)
 
 # --- Data Loading and Preprocessing (Cached) ---
 @st.cache_data
 def load_data():
-    # --- DEBUGGING START ---
-    st.info("Attempting to load data. Checking file paths...")
-    current_dir = os.getcwd()
-    st.write(f"Current working directory: {current_dir}")
-    
-    files_in_dir = os.listdir(current_dir)
-    st.write("Files in current directory:")
-    st.write(files_in_dir)
-
-    if "training.csv" not in files_in_dir:
-        st.error("training.csv not found in the current directory!")
-        st.stop()
-    if "testing.csv" not in files_in_dir:
-        st.error("testing.csv not found in the current directory!")
-        st.stop()
-    st.success("CSV files seem to be present!")
-    # --- DEBUGGING END ---
-
     try:
+        # Load the CSV files with their corrected names
         df = pd.read_csv("training.csv")
         tr = pd.read_csv("testing.csv")
     except FileNotFoundError:
@@ -44,10 +120,12 @@ def load_data():
         st.stop()
 
     # --- Column Name Cleaning for DataFrames ---
+    # Strip whitespace, replace spaces with underscores, convert to lowercase, and fix double underscores
     df.columns = df.columns.str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
     tr.columns = tr.columns.str.strip().str.replace(' ', '_').str.lower().str.replace('__', '_')
 
     # List of symptoms - now in a consistent format (all lowercase, underscores)
+    # This list is based on the cleaned column names observed from the CSVs.
     l1 = [
         'itching', 'skin_rash', 'nodal_skin_eruptions', 'continuous_sneezing', 'shivering', 'chills', 'joint_pain',
         'stomach_pain', 'acidity', 'ulcers_on_tongue', 'muscle_wasting', 'vomiting', 'burning_micturition',
@@ -125,10 +203,6 @@ def load_data():
 
     # Return the original disease names for display purposes in the UI
     return l1, original_disease_names, X, y, X_test, y_test
-
-# --- Remaining app.py code (model training, functions, UI rendering) ---
-# ... (This part is unchanged from the previous complete app.py) ...
-l1, disease, X, y, X_test, y_test = load_data()
 
 # --- Model Training (Cached) ---
 @st.cache_resource

@@ -20,8 +20,8 @@ set_page_config_and_styles()
 @st.cache_data
 def load_data():
     try:
-        df = pd.read_csv("training (1).csv")
-        tr = pd.read_csv("testing (1).csv")
+        df = pd.read_csv("training.csv")
+        tr = pd.read_csv("testing.csv")
     except FileNotFoundError:
         st.error("Error: 'training (1).csv' or 'testing (1).csv' not found. Please ensure they are in the same directory as app.py.")
         st.stop()

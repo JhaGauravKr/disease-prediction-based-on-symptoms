@@ -4,6 +4,11 @@
 
 The Smart Disease Predictor System is a Streamlit-based web application that leverages various Machine Learning algorithms to predict a potential disease based on user-provided symptoms. This project aims to offer a user-friendly interface for preliminary health assessments, utilizing trained models to provide predictions and insights.
 
+## Live Demo
+
+Experience the app live here: [Click Here](https://jhagauravkr-diseasepredictor.streamlit.app/)
+
+
 ## Features
 
 * **Intuitive User Interface:** Built with Streamlit, providing a clean, modern, and interactive web interface.
